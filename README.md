@@ -13,6 +13,14 @@ curl -sS https://getcomposer.org/installer | php
 php ./composer.phar install
 
 yum install sqlite
+cd {path_to_install}/db
+sqlite3 logpool.db < default.sql
+
+crontab -e
+---
+*/5 * * * * php {path_to_install}/batch/cron.php
+---
+
 ```
 
 
