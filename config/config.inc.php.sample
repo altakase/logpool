@@ -9,3 +9,14 @@ define('CONFIG_MAIL_FROM', 'apache@localhost.localdomain');
 
 define('CONFIG_AUTH_BASIC_USER', '____');
 define('CONFIG_AUTH_BASIC_PASS', '____');
+
+
+define('CONFIG_LOG_GROUP_INTERVAL_SECONDS', 3600);
+
+//AIDE
+define('CONFIG_AIDE_EXEC', '/usr/sbin/aide');
+define('CONFIG_AIDE_DB', '/var/lib/aide/aide.db.gz');
+define('CONFIG_AIDE_NEWDB', '/var/lib/aide/aide.db.new.gz');
+
+//LAST
+define('CONFIG_LAST_COMMAND', '/usr/bin/last | grep -v "still logged in" | grep -v "system boot"');
