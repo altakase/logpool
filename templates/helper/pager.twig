@@ -1,0 +1,17 @@
+<nav>
+    <ul class="pagination">
+        <li class="disabled"><span aria-hidden="true">{{ pager_info.first|e }} - {{ pager_info.last|e }} / {{ pager_info.total_count|e }}</span></li>
+        <li {% if not pager_info.previous_page %}class="disabled"{% endif %}>
+            <a {% if pager_info.previous_page %}href="{{ url_prefix }}/{{ pager_info.previous_page }}"
+               {% else %}href=""{% endif %} aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+            </a>
+        </li>
+        <li {% if not pager_info.next_page %}class="disabled"{% endif %}>
+            <a {% if pager_info.next_page %}href="{{ url_prefix }}/{{ pager_info.next_page }}"
+               {% else %}href=""{% endif %} aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+            </a>
+        </li>
+    </ul>
+</nav>

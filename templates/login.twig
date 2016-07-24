@@ -1,0 +1,23 @@
+{% include 'outer/header.twig' with {'anon': true}  %}
+<div class="container">
+    <div class="starter-template">
+        {% if msgs %}
+        {% for msg in msgs %}
+            <div class="alert alert-danger" role="alert">
+                <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+                <span class="sr-only">Error:</span>
+                {{ msg|e }}
+            </div>
+        {% endfor %}
+        {% endif %}
+        <form class="form-signin" method="POST" action="/login">
+            <label for="inputUsername" class="sr-only">ユーザー名</label>
+            <input type="text" id="inputUsername" name="inputUsername" class="form-control" placeholder="ユーザー名" required="" autofocus="" {% if inputUsername %} value="{{ inputUsername|e }}" {% endif %}/>
+            <label for="inputPassword" class="sr-only">パスワード</label>
+            <input type="password" id="inputPassword" name="inputPassword" class="form-control" placeholder="パスワード" required=""/>
+            <input type="hidden" name="{{ csrf.key|e }}" value="{{ csrf.value|e }}"/>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">ログイン</button>
+        </form>
+    </div>
+</div><!-- /.container -->
+{% include 'outer/footer.twig' %}

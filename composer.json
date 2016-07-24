@@ -1,0 +1,9 @@
+{
+  "require": {
+    "slim/slim": ">=v2.6.2",
+    "j4mie/idiorm": ">=v1.5.1",
+    "phpmailer/phpmailer": "~5.2",
+    "twig/twig": "*",
+    "netcarver/textile": "3.5.*"
+  }
+}

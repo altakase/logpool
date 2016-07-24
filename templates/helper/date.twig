@@ -1,0 +1,5 @@
+{% if detail %}
+    <span>{{ date_text|e|date("Y/m/d") }}&nbsp;</span><span>{{ date_text|e|date("H:i") }}</span>
+{% else %}
+    <span class="hidden-xs">{{ date_text|e|date("Y ") }}</span><span>{{ date_text|e|date("m/d H:i") }}</span>
+{% endif %}

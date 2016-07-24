@@ -1,0 +1,61 @@
+{% include 'outer/header.twig' %}
+
+<!-- /.container -->
+<div class="container">
+    <div class="content">
+    	<h3>
+    	 {% include 'helper/date.twig' with {'date_text': detail.first_log_date, 'detail': true} %} のサーバーログ
+    	</h3>
+        {% if result %}
+        <table class="table table-striped">
+            <tbody>
+            {% for record in result %}
+            <tr>
+            	<th colspan="2">{% include 'helper/date.twig' with {'date_text': record.date, 'detail': true} %} &nbsp; {{ record.display_log_type|e }}</th>
+            </tr>
+			<tr>  
+				<td colspan="2"><textarea class="form-control" rows="5" readonly="readonly">{{ record.new_content|e }}</textarea><br/></td>				
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {% endif %}
+        
+        <h3>ログの確認状況</h3>
+        <form method="post" action="/detail/{{ detail.id|e }}">
+		  <table class="table">
+		  	<tr>
+		    	<th><label for="inputStatus">ステータス</label></th>
+		    	<td>
+			    	<select id="inputStatus" name="last_status" class="form-control">
+				  		{% for key,val in status_list %}
+						<option value="{{ key }}" {{  key == detail.last_status ? ' selected ' : '' }}>{{ val| e }}</option>
+				  	{% endfor %}
+			    	</select>
+		    	</td>
+		  	</tr>
+		  	<tr>
+		    	<th><label for="inputComment">コメント</label></th>
+		    	<td>
+		    		<textarea id="inputComment" name="last_comment" class="form-control" rows="5">{{ detail.last_comment|e }}</textarea>	
+		    	</td>
+		  	</tr>
+		  	<tr>
+		    	<th>最終更新日時</th>
+		    	<td>
+		    		{% if detail.last_confirm_date %}
+		    			{% include 'helper/date.twig' with {'date_text': detail.last_confirm_date, 'detail': true} %}
+		    		{% endif %}
+		    	</td>
+		  	</tr>
+		  	<tr>
+		  		<td colspan="2" align="center">
+					<button class="btn btn-primary" type="submit">更新</button>
+					<a class="btn btn-default" href="javascript:history.back()">戻る</a>
+		  		</td>
+		  	</tr>	  	
+        </form>
+    </div>
+</div>
+<!-- /.container -->
+{% include 'outer/footer.twig' %}

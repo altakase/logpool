@@ -1,0 +1,12 @@
+.idea
+.twigcache/*
+*.iml
+out
+gen
+config/config.inc.php
+composer.phar
+composer.lock
+vendor/*
+db/*.db
+web/sqlm
+

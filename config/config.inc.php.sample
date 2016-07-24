@@ -1,0 +1,11 @@
+<?php
+define('CONFIG_SITE_NAME', 'logpool');
+define('CONFIG_SQLITE_FILE_NAME', 'logpool.db');
+define('CONFIG_SESSION_SECRET', '____');
+define('CONFIG_XML_TOKEN', '____');
+
+define('CONFIG_MAIL_BASEURL', 'http://yourdomain/');
+define('CONFIG_MAIL_FROM', 'apache@localhost.localdomain');
+
+define('CONFIG_AUTH_BASIC_USER', '____');
+define('CONFIG_AUTH_BASIC_PASS', '____');

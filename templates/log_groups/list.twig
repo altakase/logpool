@@ -1,0 +1,38 @@
+{% include 'outer/header.twig' %}
+
+<!-- /.container -->
+<div class="container">
+    <div class="content">
+        {% if result %}
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>内容</th>
+                <th class="col-xs-2">検知日時</th>
+                <th class="col-xs-1">確認状況</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for record in result %}
+                <tr data-href="/detail/{{record.id|e}}">
+                    <td><a href="/detail/{{record.id|e}}">{{ record.display_log_types|e }}</a></td>
+                    <td class="text-nowrap">{% include 'helper/date.twig' with {'date_text': record.last_log_date} %}</td>
+                    <td class="text-nowrap">{{ record.display_last_status|e }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {% if pager_info %}
+            {% include 'helper/pager.twig' with {'url_prefix': '/page'} %}
+        {% endif %}
+        {% else %}
+            <div class="alert alert-info" role="alert">
+               条件と一致するログはありません。
+            </div>
+        {% endif %}
+
+    </div>
+</div>
+<!-- /.container -->
+{% include 'outer/footer.twig' %}

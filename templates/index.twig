@@ -1,0 +1,17 @@
+{% include 'outer/header.twig' %}
+<!-- /.container -->
+<div class="container">
+    <div class="content">
+        <h3>Input Textile document</h3>
+        <!-- contents here -->
+        <form class="form" method="POST" action="/dldoc">
+            <textarea rows="20" id="inputText" name="inputText" class="form-control">{{ inputText|e }}</textarea>
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Download as PDF</button>
+        </form>
+
+    </div>
+</div>
+<!-- /.container -->
+<script src="/js/password.js"></script>
+
+{% include 'outer/footer.twig' %}
