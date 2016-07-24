@@ -15,6 +15,8 @@ php ./composer.phar install
 yum install sqlite
 cd {path_to_install}/db
 sqlite3 logpool.db < default.sql
+chown -R apache: {path_to_install}/db
+# or chown -R nginx: {path_to_install}/db
 
 crontab -e
 ---
