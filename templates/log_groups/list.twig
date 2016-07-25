@@ -3,7 +3,15 @@
 <!-- /.container -->
 <div class="container">
     <div class="content">
-        {% if result %}
+        <div class="hidden-xs" id="searchbox">
+        	<div class="input-group">
+		      <span class="input-group-addon">
+		        <input type="checkbox" id="daterangeFlag" {% if daterange %}checked=checked {% endif %}>
+		      </span>
+		      <input type="text" id="daterange" class="form-control" {% if not daterange %}disabled=disabled{% endif %}/>
+		    </div>
+        </div>      
+        {% if result %}      
         <table class="table table-striped">
             <thead>
             <tr>
@@ -24,7 +32,7 @@
         </table>
 
         {% if pager_info %}
-            {% include 'helper/pager.twig' with {'url_prefix': '/page'} %}
+            {% include 'helper/pager.twig' with {'url_prefix': '/page', 'url_suffix' : query_string} %}
         {% endif %}
         {% else %}
             <div class="alert alert-info" role="alert">
@@ -35,4 +43,62 @@
     </div>
 </div>
 <!-- /.container -->
+
+<script>
+jQuery( function($) {
+	$('#daterangeFlag').change(function(){
+		if($("#daterangeFlag").prop('checked')) {
+			location.href = location.pathname + "?d=" + moment(moment().format("YYYY/MM/01 00:00")).unix() + '-' + moment(moment().format("YYYY/MM/DD 23:59")).unix();
+		} else {
+			location.href = location.pathname;
+		}
+	});
+	$('#daterange').daterangepicker({
+		"autoApply": true,
+	    "locale": {
+	        "format": "YYYY/MM/DD",
+	        "separator": " - ",
+	        "applyLabel": "OK",
+	        "cancelLabel": "キャンセル",
+	        "fromLabel": "From",
+	        "toLabel": "To",
+	        "customRangeLabel": "Custom",
+	        "weekLabel": "W",
+	        "daysOfWeek": [
+	            "日",
+	            "月",
+	            "火",
+	            "水",
+	            "木",
+	            "金",
+	            "土"
+	        ],
+	        "monthNames": [
+	            "01",
+	            "02",
+	            "03",
+	            "04",
+	            "05",
+	            "06",
+	            "07",
+	            "08",
+	            "09",
+	            "10",
+	            "11",
+	            "12"
+	        ],
+	        "firstDay": 1
+	    }
+	{% if daterange %}
+	    ,"startDate": '{{ daterange.start|e|date("Y/m/d") }}',
+	    "endDate": '{{ daterange.end|e|date("Y/m/d") }}'
+	{% else %}
+	    ,"startDate": moment().format("YYYY/MM/01"),
+	    "endDate": moment().format("YYYY/MM/DD")
+	{% endif %}
+	}, function(start, end, label) {
+	  location.href = location.pathname + "?d=" + moment(start.format("YYYY/MM/DD 00:00")).unix() + '-' + moment(end.format("YYYY/MM/DD 23:59")).unix();
+	});
+});
+</script>
 {% include 'outer/footer.twig' %}

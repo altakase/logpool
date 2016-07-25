@@ -75,7 +75,7 @@ class LogGroup
      * @param Int $page
      * @param Array $hide_status
      */
-    public static function getList($page = null, $hide_status = null, &$pager_info = null)
+    public static function getList($page = null, $params = null, &$pager_info = null)
     {
         $query = \ORM::for_table('log_group')
         		->select('log_group.id')
@@ -84,6 +84,11 @@ class LogGroup
 		        ->select('log_group.first_log_date')
 		        ->select('log_group.last_log_date');
 
+        if(isset($params['d'])) {
+        	$daterange_array = explode("-", $params['d']);
+        	$query = $query->where_gte('log_group.last_log_date', $daterange_array[0])
+        					->where_lte('log_group.last_log_date', $daterange_array[1]);
+        }
 
         $query->order_by_desc('log_group.last_log_date');
 

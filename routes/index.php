@@ -1,18 +1,41 @@
 <?php
 /** トップ画面*/
 $app->get ( '/', function () use ($app, $twig) {
-	$result = \lib\db\LogGroup::getList ( 1, null, $pager_info );
+	$params = $app->request()->get();
+	$daterange=null;
+	if(isset($params['d'])) {
+		$daterange_array = explode("-", $params['d']);
+		$daterange = array("start" => $daterange_array[0], "end" => $daterange_array[1]);
+	}
+
+	$result = \lib\db\LogGroup::getList ( 1, $params, $pager_info );
 	print $twig->render ( 'log_groups/list.twig', array (
 			'result' => $result,
-			'pager_info' => $pager_info 
+			'pager_info' => $pager_info,
+			'daterange' => $daterange,
+			'query_string' => '?'.http_build_query($params)
 	) );
 } );
 
 $app->get ( '/page/:page', function ($page) use ($app, $twig) {
-	$result = \lib\db\LogGroup::getList ( $page, null, $pager_info );
+	if(!is_numeric($page)){
+		$page = 1;
+	}
+	
+	$params = $app->request()->get();
+	$daterange=null;
+	if(isset($params['d'])) {
+		$daterange_array = explode("-", $params['d']);
+		$daterange = array("start" => $daterange_array[0], "end" => $daterange_array[1]);
+	}	
+	
+	$result = \lib\db\LogGroup::getList ( $page, $params, $pager_info );
+	
 	print $twig->render ( 'log_groups/list.twig', array (
 			'result' => $result,
-			'pager_info' => $pager_info 
+			'pager_info' => $pager_info,
+			'daterange' => $daterange,
+			'query_string' => '?'.http_build_query($params) 
 	) );
 } );
 
@@ -27,7 +50,7 @@ $app->get ( '/detail/:group_id', function ($group_id) use ($app, $twig) {
 } );
 
 $app->post ( '/detail/:group_id', function ($group_id) use ($app, $twig) {
-	$params = $app->request ()->post ();
+	$params = $app->request()->post();
 	$msgs = array();
 	$result = \lib\db\LogGroup::updateStatus( $group_id, $params, $msgs );
 	$app->redirect( '/' );
