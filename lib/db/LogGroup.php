@@ -182,7 +182,7 @@ class LogGroup
     	$query->order_by_desc('log_group.last_log_date');
     	$result = $query->find_many();
     	
-    	mb_convert_encoding('"内容","検知日時","確認状況","コメント","確認日時"', "SJIS", "UTF-8");
+    	print mb_convert_encoding('"内容","検知日時","確認状況","コメント","確認日時"', "SJIS", "UTF-8")."\r\n";
     	foreach($result as $record) {
     		self::addDisplayAttributes($record);
     		
