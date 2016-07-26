@@ -106,27 +106,32 @@ class LogGroup
         }
 
         foreach($result as $record) {
-        	$display_log_types = '';
-        	if(isset($record['log_types'])) {
-        		$log_types = preg_replace("/^\[|\]$/", "", $record['log_types']);
-        		$log_types_array = explode('][', $log_types);
-        		$display_log_types_array = array();
-        		foreach($log_types_array as $type) {
-        			$display_type = @\lib\Constants::$DISPLAY_LOG_TYPES[$type];
-        			if(!empty($display_type)){
-        				$display_log_types_array[] = $display_type;
-        			}
-        		}
-        		$display_log_types = implode(", ", $display_log_types_array);
-        	}
-        	
-        	$record['display_log_types'] = $display_log_types;
-        	$record['display_last_status'] = @self::$DISPLAY_LOG_TYPES[$record['last_status']];
+        	self::addDisplayAttributes($record);
         }
         
         return $result;
     }
 
+    
+    public static function addDisplayAttributes(&$record){
+		$display_log_types = '';
+		if (isset ( $record ['log_types'] )) {
+			$log_types = preg_replace ( "/^\[|\]$/", "", $record ['log_types'] );
+			$log_types_array = explode ( '][', $log_types );
+			$display_log_types_array = array ();
+			foreach ( $log_types_array as $type ) {
+				$display_type = @\lib\Constants::$DISPLAY_LOG_TYPES [$type];
+				if (! empty ( $display_type )) {
+					$display_log_types_array [] = $display_type;
+				}
+			}
+			asort ( $display_log_types_array );
+			$display_log_types = implode ( ", ", $display_log_types_array );
+		}
+		
+		$record ['display_log_types'] = $display_log_types;
+		$record ['display_last_status'] = @self::$DISPLAY_LOG_TYPES [$record ['last_status']];
+    }
 
 
     /**
@@ -151,6 +156,50 @@ class LogGroup
             ->find_one()
             ->delete();
         return true;
+    }
+    
+    /**
+     * @param Int $page
+     * @param Array $hide_status
+     */
+    public static function printCSV($start = null, $end = null)
+    {
+
+    	$query = \ORM::for_table('log_group')
+    	->select('log_group.id')
+    	->select('log_group.last_status')
+    	->select('log_group.last_comment')
+    	->select('log_group.last_confirm_date')
+    	->select('log_group.log_types')
+    	->select('log_group.first_log_date')
+    	->select('log_group.last_log_date');
+    
+    	if(is_numeric($start) && is_numeric($end) && ($start < $end)) {
+    		$query = $query->where_gte('log_group.last_log_date', $start)
+    		->where_lte('log_group.last_log_date', $end);
+    	}
+    	
+    	$query->order_by_desc('log_group.last_log_date');
+    	$result = $query->find_many();
+    	
+    	mb_convert_encoding('"内容","検知日時","確認状況","コメント","確認日時"', "SJIS", "UTF-8");
+    	foreach($result as $record) {
+    		self::addDisplayAttributes($record);
+    		
+    		$fields = array();    		
+    		$fields[] =  mb_convert_encoding($record['display_log_types'], "SJIS", "UTF-8");
+    		$fields[] = date('Y/m/d H:i', $record['last_log_date']);
+    		$fields[] =  mb_convert_encoding($record['display_last_status'], "SJIS", "UTF-8");
+    		$fields[] =  mb_convert_encoding($record['last_comment'], "SJIS", "UTF-8");
+    		if(isset($record['last_confirm_date']) && $record['last_confirm_date'] != null) {
+    			$fields[] = date('Y/m/d H:i', $record['last_confirm_date']);
+    		} else {
+    			$fields[] = "";
+    		}
+    		
+    		fputcsv(fopen('php://output', 'w'), $fields);
+    	}
+
     }
 
 	

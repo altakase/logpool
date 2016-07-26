@@ -55,3 +55,21 @@ $app->post ( '/detail/:group_id', function ($group_id) use ($app, $twig) {
 	$result = \lib\db\LogGroup::updateStatus( $group_id, $params, $msgs );
 	$app->redirect( '/' );
 } );
+
+$app->post ( '/csv', function () use ($app, $twig) {
+	$params = $app->request ()->post ();
+	
+	$res = $app->response();
+	$res['Content-Description'] = 'File Transfer';
+	$res['Content-Type'] = 'application/octet-stream';
+	$res['Content-Disposition'] ='attachment; filename=serverlog.csv';
+	$res['Content-Transfer-Encoding'] = 'binary';
+	$res['Expires'] = '0';
+	$res['Cache-Control'] = 'must-revalidate';
+	$res['Pragma'] = 'public';
+	if(isset($params['start']) && $params['end']) {
+		$result = \lib\db\LogGroup::printCSV($params['start'], $params['end']);
+	} else {
+		$result = \lib\db\LogGroup::printCSV();
+	}
+} );

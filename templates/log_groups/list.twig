@@ -3,13 +3,24 @@
 <!-- /.container -->
 <div class="container">
     <div class="content">
-        <div class="hidden-xs" id="searchbox">
-        	<div class="input-group">
-		      <span class="input-group-addon">
-		        <input type="checkbox" id="daterangeFlag" {% if daterange %}checked=checked {% endif %}>
-		      </span>
-		      <input type="text" id="daterange" class="form-control" {% if not daterange %}disabled=disabled{% endif %}/>
-		    </div>
+        <div class="hidden-xs clearfix" id="searchbox">
+        	<table class="pull-right"><tr>
+	        	<td class="input-group">        		
+					<span class="input-group-addon">
+						<input type="checkbox" id="daterangeFlag" {% if daterange %}checked=checked {% endif %}>
+					</span>
+					<input type="text" id="daterange" class="form-control" {% if not daterange %}disabled=disabled{% endif %}/>		
+			    </td>
+    		    <td>
+				    <button id="csvsubmit" class="btn btn-default">CSVダウンロード</button>			
+					<form id="csvform" action="/csv" method="post">
+					{% if daterange %}
+					    <input type="hidden" name="start" value="{{ daterange.start|e }}"/>
+					    <input type="hidden" name="end" value="{{ daterange.end|e }}"/>
+					{% endif %}
+					</form>
+				</td>
+		    </tr></table>
         </div>      
         {% if result %}      
         <table class="table table-striped">
@@ -53,6 +64,11 @@ jQuery( function($) {
 			location.href = location.pathname;
 		}
 	});
+
+	$("#csvsubmit").click(function(){
+		$("#csvform").submit();
+	});
+	
 	$('#daterange').daterangepicker({
 		"autoApply": true,
 	    "locale": {
