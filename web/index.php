@@ -3,7 +3,7 @@ include_once(dirname(__FILE__) . '/../lib/Core.php');
 
 session_cache_limiter(false);
 session_name(\lib\Constants::SESSION_NAME);
-session_start();
+//session_start();
 
 //Twig_Autoloader::register();
 $loader = new Twig_Loader_Filesystem(dirname(__FILE__) . '/../templates');
