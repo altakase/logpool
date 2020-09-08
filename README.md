@@ -39,6 +39,7 @@ vim /etc/aide.conf
 !/usr/src
 !/usr/tmp
 !/usr/share
+!{path_to_install}/db
 ---
 
 aide --init
